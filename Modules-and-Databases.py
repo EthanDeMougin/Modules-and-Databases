@@ -1,15 +1,14 @@
 import sqlite3
 
 conn = sqlite3.connect('books.db')
-curs = conn.cursor()
+cursor = conn.cursor()
 
-curs.execute("""
-CREATE TABLE books (
-  title TEXT, 
-  author TEXT,
-  year INTEGER
-)
-""")
+with open('books2.csv', 'r', newline='') as file:
+  reader = csv.reader(file)
+  next(reader)  
+
+for row in reader:
+  cursor.execute('INSERT INTO books (title, author, year) VALUES (?, ?, ?)', row)
 
 conn.commit()
 conn.close()
